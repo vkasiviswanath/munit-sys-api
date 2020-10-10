@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="munit-sys-api-suite.xml" />
+	<munit:test name="munit-sys-apiFlow-test" doc:id="3f49a16f-52f2-4eba-a093-7baa6c6db861" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="04221617-40a5-4004-873a-56fec25548b6" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://munitsysapiFlowtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://munitsysapiFlowtest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to munit-sys-apiFlow" doc:id="604470f5-6fff-47a9-a717-84a3ead6a92d" name="munit-sys-apiFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="4bb6a0e9-d762-4ba1-909d-5685d316863c" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import munitsysapiFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit-sys-apiFlow-test1" doc:id="f3bd7496-45c4-42ac-9b2f-a58179ff6633" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="c4a65846-a374-49c8-b78a-79d182810454" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://munitsysapiFlowtest1\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://munitsysapiFlowtest1\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to munit-sys-apiFlow" doc:id="d6966e10-9acf-4cba-86a3-71e012ac5eeb" name="munit-sys-apiFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="785bb6c3-6f65-4ca8-bda1-8b49fe798e4a" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import munitsysapiFlowtest1::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="fdf4e64d-4c55-4626-9c78-f879263e086a" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="munit-sys-apiFlow" doc:id="ee6c0630-4927-4c4e-9959-65e895dd6859" >
+		<http:listener doc:name="Listener" doc:id="0ab57c47-cd3a-434f-9e93-d6a9929c76ac" config-ref="HTTP_Listener_config" path="/munit"/>
+		<set-variable value="#[attributes.queryParams.name]" doc:name="Set Variable" doc:id="c908aba6-3cbf-4298-9760-d84e5c17a942" variableName="company"/>
+		<set-variable value="#[payload.location]" doc:name="Set Variable" doc:id="719a8fbb-18d1-4b76-b4b3-e5f5733e0af4" variableName="location"/>
+		<ee:transform doc:name="Transform Message" doc:id="b354a086-a12a-49a4-b64f-bb206edee5c8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	Company: vars.company,
+	Location: vars.location
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
